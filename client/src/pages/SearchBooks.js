@@ -124,9 +124,10 @@ const SearchBooks = () => {
             : 'Search for a book to begin'}
         </h2>
         <Row>
-          <Col>
+          <Col md={4}>
           {searchedBooks.map((book) => {
             return (
+
               //removed column and key to put in card. 
               //THIS IS THE THING THAT WAS TAKING ME FOREVER. 
               // had to switch col key with card key. gaaaaaaaaaaah
