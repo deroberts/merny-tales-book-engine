@@ -9,7 +9,9 @@ import { REMOVE_BOOK } from '../utils/mutations';
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
+
   const [deleteBook] = useMutation(REMOVE_BOOK);
+
   const userData = data?.me || {};
 
   const handleDeleteBook = async (bookId) => {
@@ -20,13 +22,18 @@ const SavedBooks = () => {
     }
 
     try {
-      await deleteBook({
+      const response = await deleteBook({
         variables: { bookId },
       });
+      if (!response) {
+        throw new Error('something went wrong!');
+      }
+
 
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
       document.getElementById(bookId).remove();
+    
       let counterEl = document.getElementById('counter');
       let currentNum = parseInt(counterEl.innerText.split(' ')[1]);
       if (currentNum === 1) {
@@ -40,6 +47,7 @@ const SavedBooks = () => {
       console.error(err);
     }
   };
+  
 
   if (loading) {
     return <h2>LOADING...</h2>;
