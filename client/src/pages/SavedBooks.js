@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
@@ -10,10 +10,10 @@ import { REMOVE_BOOK } from '../utils/mutations';
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
 
-  const [deleteBook] = useMutation(REMOVE_BOOK);
-
   const userData = data?.me || {};
-
+  
+  const [removeBook] = useMutation(REMOVE_BOOK);
+// create a function that accepts the book mongo id value as parameter and deletes the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -22,31 +22,32 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await deleteBook({
+      await removeBook({
         variables: { bookId },
       });
-      if (!response) {
-        throw new Error('something went wrong!');
-      }
-
-
+      
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
-      document.getElementById(bookId).remove();
-    
-      let counterEl = document.getElementById('counter');
-      let currentNum = parseInt(counterEl.innerText.split(' ')[1]);
-      if (currentNum === 1) {
-        return (counterEl.innerText = 'You have no saved books!');
-      } else {
-        counterEl.innerText = `Viewing ${currentNum - 1} saved ${
-          currentNum === 1 ? 'book' : 'books'
-        }`;
-      }
     } catch (err) {
       console.error(err);
     }
   };
+  //don't think I'll need this     
+  // document.getElementById(bookId).remove();
+    
+  //     let counterEl = document.getElementById('counter');
+  //     let currentNum = parseInt(counterEl.innerText.split(' ')[1]);
+  //     if (currentNum === 1) {
+  //       return (counterEl.innerText = 'You have no saved books!');
+  //     } else {
+  //       counterEl.innerText = `Viewing ${currentNum - 1} saved ${
+  //         currentNum === 1 ? 'book' : 'books'
+  //       }`;
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
   
 
   if (loading) {
@@ -72,7 +73,7 @@ const SavedBooks = () => {
           {userData.savedBooks.map((book) => {
             return (
              <Col md="4">
-              <Card key={book.bookId} border="dark" id={book.bookId}>
+              <Card key={book.bookId} border="dark">
                 {book.image ? (
                   <Card.Img
                     src={book.image}

@@ -2,18 +2,17 @@ import React, { useState, useEffect } from 'react';
 import {
   Container,
   Col,
-  // Form,
+  Form,
   Button,
   Card,
   Row
 } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
-import Auth from '../utils/auth';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
-import { useMutation } from '@apollo/client';
-// apollo hooks
-import { SAVE_BOOK } from '../utils/mutations';
 import { searchGoogleBooks } from '../utils/API';
+import { SAVE_BOOK } from '../utils/mutations';
+// apollo hook
+import { useMutation } from '@apollo/client';
+import Auth from '../utils/auth';
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -24,7 +23,7 @@ const SearchBooks = () => {
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
-  const [saveBookMutation] = useMutation(SAVE_BOOK);
+  const [saveBook] = useMutation(SAVE_BOOK);
 
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
@@ -78,17 +77,14 @@ const SearchBooks = () => {
     }
   
     try {
-      const { data } = await saveBookMutation({
+      // const { data } = await saveBookMutation({
+      await saveBook({
         variables: { bookData: { ...bookToSave } },
       });
 
-      if (!data) {
-        throw new Error('something went wrong!');
-      }
-
   
       // if book successfully saves to user's account, save book id to state
-      setSavedBookIds([...savedBookIds, data.saveBook.bookId]);
+      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
     }
@@ -128,10 +124,13 @@ const SearchBooks = () => {
             : 'Search for a book to begin'}
         </h2>
         <Row>
+          <Col>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4" key={book.bookId}>
-                <Card border='dark'>
+              //removed column and key to put in card. 
+              //THIS IS THE THING THAT WAS TAKING ME FOREVER. 
+              // had to switch col key with card key. gaaaaaaaaaaah
+                <Card key={book.bookId} border='dark'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
                   ) : null}
@@ -141,19 +140,23 @@ const SearchBooks = () => {
                     <Card.Text>{book.description}</Card.Text>
                     {Auth.loggedIn() && (
                       <Button
-                        disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
+                        disabled={savedBookIds?.some(
+                          (savedBookId) => savedBookId === book.bookId
+                          )}
                         className='btn-block btn-info'
-                        onClick={() => handleSaveBook(book.bookId)}>
-                        {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
+                        onClick={() => handleSaveBook(book.bookId)}
+                        >
+                        {savedBookIds?.some(
+                          (savedBookId) => savedBookId === book.bookId)
                           ? 'This book has already been saved!'
                           : 'Save this Book!'}
                       </Button>
                     )}
                   </Card.Body>
                 </Card>
-              </Col>
             );
           })}
+          </Col>
         </Row>
       </Container>
     </>

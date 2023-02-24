@@ -6,9 +6,6 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        // const userData = await User.findOne({ _id: context.user._id });
-        // .select('-__v -password');
-        // return userData;
         return await User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError('Not logged in');
@@ -41,18 +38,6 @@ const resolvers = {
       return { token, user };
     },
 
-    // saveBook: async (_, { authors, description, title, bookId, image, link }, context) => {
-    //   if (context.user) {
-    //     const updatedUser = await User.findOneAndUpdate(
-    //       { _id: context.user._id },
-    //       { $addToSet: { savedBooks: { authors, description, title, bookId, image, link } } },
-    //       { new: true }
-    //     );
-    //     return updatedUser;
-    //   }
-    //   throw new AuthenticationError('You need to be logged in!');
-    // },
-
     saveBook: async (_, { bookInput }, context) => {
       if (context.user) {
         return await User.findOneAndUpdate(
@@ -69,14 +54,6 @@ const resolvers = {
     throw new AuthenticationError('You need to be logged in!');
   },
 
-    // removeBook: async (parent, { bookId }, context) => {
-    //   if (context.user) {
-    //     const updatedUser = await User.findOneAndUpdate(
-    //       { _id: context.user._id },
-    //       { $pull: { savedBooks: { bookId } } },
-    //       { new: true }
-    //     );
-    //     return updatedUser;
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
         return await User.findOneAndUpdate(
