@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 import {
   Container,
   Col,
-  Form,
+  // Form,
   Button,
   Card,
   Row
 } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
-import { SAVE_BOOK } from '../utils/mutations';
+import Form from 'react-bootstrap/Form';
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import { useMutation } from '@apollo/client';
+// apollo hooks
+import { SAVE_BOOK } from '../utils/mutations';
+import { searchGoogleBooks } from '../utils/API';
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -21,6 +23,14 @@ const SearchBooks = () => {
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+
+  const [saveBookMutation] = useMutation(SAVE_BOOK);
+
+  useEffect(() => {
+    return () => saveBookIds(savedBookIds);
+  });
+
+
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -55,7 +65,6 @@ const SearchBooks = () => {
   };
 
   // create function to handle saving a book to our database
-  const [saveBookMutation] = useMutation(SAVE_BOOK);
 
   const handleSaveBook = async (bookId) => {
     // find the book in `searchedBooks` state by the matching id
@@ -72,6 +81,11 @@ const SearchBooks = () => {
       const { data } = await saveBookMutation({
         variables: { bookData: { ...bookToSave } },
       });
+
+      if (!data) {
+        throw new Error('something went wrong!');
+      }
+
   
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, data.saveBook.bookId]);
@@ -116,8 +130,8 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4">
-                <Card key={book.bookId} border='dark'>
+              <Col md="4" key={book.bookId}>
+                <Card border='dark'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
                   ) : null}

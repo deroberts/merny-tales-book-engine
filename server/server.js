@@ -6,7 +6,7 @@ const path = require("path");
 const db = require("./config/connection");
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 4000;
 
 const server = new ApolloServer({
   typeDefs,
@@ -21,8 +21,15 @@ const server = new ApolloServer({
   },
 });
 
+async function startApolloServer() {
+  await server.start();
+  server.applyMiddleware({ app });
+}
+
+startApolloServer();
+
 // applying the Apollo server to the Express server as middleware
-server.applyMiddleware({ app });
+// server.applyMiddleware({ app });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
