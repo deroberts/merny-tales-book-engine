@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "engines": {
-    "node": ">= 16.18.0 <17"
+    "node": ">= 16.0.0 <17"
   },
   "scripts": {
     "start": "node server/server.js",
@@ -17,8 +17,5 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^5.1.0"
-  },
-  "dependencies": {
-    "bcryptjs":"2.4.3"
   }
 }
