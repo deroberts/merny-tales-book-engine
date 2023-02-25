@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 import { GET_ME } from '../utils/queries';
 import { useMutation } from '@apollo/client';
 import { REMOVE_BOOK } from '../utils/mutations';
-// books comp 
+// books components 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
 
