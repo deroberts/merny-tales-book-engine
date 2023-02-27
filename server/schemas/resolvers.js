@@ -8,7 +8,7 @@ const resolvers = {
       if (context.user) {
         return await User.findOne({ _id: context.user._id });
       }
-      throw new AuthenticationError('Not logged in');
+      throw new AuthenticationError('You need to be logged in');
     },
   },
 
@@ -16,14 +16,15 @@ const resolvers = {
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
       console.log(user);
+
       if (!user) {
-        throw new AuthenticationError('Incorrect email or password');
+        throw new AuthenticationError('No profile with this email found!');
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect email or password');
+        throw new AuthenticationError('Incorrect password');
       }
 
       const token = signToken(user);
@@ -34,7 +35,7 @@ const resolvers = {
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
-      
+
       return { token, user };
     },
 
@@ -42,17 +43,17 @@ const resolvers = {
       if (context.user) {
         return await User.findOneAndUpdate(
           { _id: context.user._id },
-          { 
-            $addToSet: { savedBooks: bookInput } ,
+          {
+            $addToSet: { savedBooks: bookInput },
           },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-    }
-    throw new AuthenticationError('You need to be logged in!');
-  },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      }
+      throw new AuthenticationError('You need to be logged in');
+    },
 
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
@@ -62,7 +63,7 @@ const resolvers = {
           { new: true }
         );
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError('You need to be logged in');
     },
   },
 };
