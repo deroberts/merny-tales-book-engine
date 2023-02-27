@@ -50,6 +50,7 @@ const SignupForm = () => {
       password: '',
     });
   };
+  // console.log(`UserFormData: ${userFormData.username} ${userFormData.email} ${userFormData.password}`)
 
   return (
     <>
