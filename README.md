@@ -1,44 +1,31 @@
-# Mery-Tales: a google book search service
+# React Apollo GraphQL App
 
-A web application that allows users to search for and save books using the Google Books API.
+This project is a React-based web application that uses Apollo Server to manage GraphQL queries and mutations for fetching and modifying data. The application replaces an existing RESTful API with the more performant GraphQL API, providing a more scalable and responsive user experience.
 
-## Technologies Used
 
-This project was built using the following technologies:
-    React.js
-    Apollo Client
-    GraphQL
-    Node.js
-    Express.js
-    MongoDB
-    Mongoose
-    Google Books API
+**The application includes the following features:**
+
+
+* GraphQL API with Apollo Server
+* Authentication middleware
+* Apollo Provider for communicating with the server
+* Deployment to Heroku with MongoDB Atlas
+* React
 
 ## Installation
 
-To install this project, follow these steps:
+To install this project, please follow these steps:
 
-Clone the repository: git clone https://github.com/your-username/book-search.git
-Install dependencies: npm install
-Usage
-To use this project, follow these steps:
-
-Start the development server: npm run deveop
-Open your web browser and navigate to http://localhost
-Enter a search term in the search box and click "Submit Search"
-View the search results and click "Save this Book" to save a book to your list
-
-## Features
-This project includes the following features:
-
-    Search for books using the Google Books API
-    View search results in a responsive grid of cards
-    Save books to a MongoDB database
-    View saved books in a list
-    Remove saved books from the list
-
-## Screenshot
-
-![Screenshot 2023-02-24 150820](https://user-images.githubusercontent.com/112577325/221292784-70178170-a6b2-4163-82d3-d5352cb4e7dc.png)
+1. Clone this repository to your local machine.
+2. Navigate to the project directory in your terminal.
+3. Run `npm install` to install the necessary dependencies.
+4. Run `npm start` to start the development server.
+5. Open `http://localhost:3000` in your web browser to view the application.
 
 
+## Demo
+Here is the link to the deployed application on Heroku.
+https://fast-falls-73782.herokuapp.com/
+
+
+![herokuBook](https://user-images.githubusercontent.com/111453328/221098615-3dd6e032-6d5b-4b3c-9409-408fdd96def5.jpg)
